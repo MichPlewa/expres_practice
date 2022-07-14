@@ -6,33 +6,33 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, '/public')));
 app.get('/testimonials', (req, res) => {
-  res.send(db);
-  res.json({ message: 'Ok' });
+  res.json(db);
 });
 
 app.get('/testimonials/:id', (req, res) => {
   const id = req.params.id;
   if (id === 'random') {
     res.send(db[Math.floor(Math.random() * db.length)]);
-    res.json({ message: 'Ok' });
   } else {
-    res.send(db.find((item) => item.id === id - 1));
-    res.json({ message: 'Ok' });
+    console.log(db.find((item) => item.id === parseInt(id)));
+    res.json(db.find((item) => item.id === parseInt(id)));
   }
 });
 
 app.post('/testimonials', (req, res) => {
   const { author, text } = req.body;
+  console.log(req.body);
   const id = uuid();
   const newTestimonial = { id: id, author, text };
   db.push(newTestimonial);
+  res.json(db);
   res.json({ message: 'Ok' });
 });
 
 app.put('/testimonials/:id', (req, res) => {
   const { author, text } = req.body;
   const id = req.params.id;
-  const testimonials = db.find((item) => item.id === id);
+  const testimonials = db.find((item) => item.id === parseInt(id));
   testimonials.author = author;
   testimonials.text = text;
   res.json({ message: 'Ok' });
@@ -40,7 +40,7 @@ app.put('/testimonials/:id', (req, res) => {
 
 app.delete('/testimonials/:id', (res, req) => {
   const id = res.params.id;
-  db.splice(db.findIndex((item) => item.id === id));
+  db.splice(db.findIndex((item) => item.id === parseInt(id)));
   res.json({ message: 'Ok' });
 });
 
