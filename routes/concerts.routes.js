@@ -1,16 +1,14 @@
 const express = require('express');
-const db = require('../db');
+const { concerts } = require('../db');
 const uuid = require('uuid').v4;
 
-const app = express();
+const router = express.Router();
 
-const { concerts } = require('../db');
-
-app.get('/concerts', (req, res) => {
+router.route('/concerts').get((req, res) => {
   res.json(concerts);
 });
 
-app.get('/concerts/:id', (req, res) => {
+router.route('/concerts/:id').get((req, res) => {
   const id = req.params.id;
   if (id === 'random') {
     res.send(concerts[Math.floor(Math.random() * concerts.length)]);
@@ -19,7 +17,7 @@ app.get('/concerts/:id', (req, res) => {
   }
 });
 
-app.post('/concerts', (req, res) => {
+router.route('/concerts').post((req, res) => {
   const { performer, genre, price, day, image } = req.query;
   const id = uuid();
   const newConcerts = { id: id, performer, genre, price, day, image };
@@ -27,7 +25,7 @@ app.post('/concerts', (req, res) => {
   res.json(concerts);
 });
 
-app.put('/concerts/:id', (req, res) => {
+router.route('/concerts/:id').put((req, res) => {
   const { performer, genre, price, day, image } = req.query;
   const id = req.params.id;
   const editConcerts = concerts.find((item) => item.id === parseInt(id));
@@ -39,7 +37,7 @@ app.put('/concerts/:id', (req, res) => {
   res.json(concerts);
 });
 
-app.delete('/testimonials/:id', (req, res) => {
+router.route('/concerts/:id').delete((req, res) => {
   const id = req.params.id;
   concerts.splice(
     concerts.findIndex((item) => item.id === parseInt(id)),
@@ -48,4 +46,4 @@ app.delete('/testimonials/:id', (req, res) => {
   res.json({ message: 'ok' });
 });
 
-module.exports = app;
+module.exports = router;

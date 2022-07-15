@@ -1,48 +1,48 @@
 const express = require('express');
-const db = require('../db');
+const { testimonials } = require('../db');
 const uuid = require('uuid').v4;
 
-const app = express();
+const router = express.Router();
 
-app.get('/testimonials', (req, res) => {
-  res.json(db.testimonials);
+router.route('/testimonials').get((req, res) => {
+  res.json(testimonials);
 });
 
-app.get('/testimonials/:id', (req, res) => {
+router.route('/testimonials/:id').get((req, res) => {
   const id = req.params.id;
   if (id === 'random') {
-    res.send(
-      db.testimonials[Math.floor(Math.random() * db.testimonials.length)]
-    );
+    res.send(testimonials[Math.floor(Math.random() * testimonials.length)]);
   } else {
-    res.json(db.testimonials.find((item) => item.id === parseInt(id)));
+    res.json(testimonials.find((item) => item.id === parseInt(id)));
   }
 });
 
-app.post('/testimonials', (req, res) => {
+router.route('/testimonials').post((req, res) => {
   const { author, text } = req.query;
   const id = uuid();
   const newTestimonial = { id: id, author, text };
-  db.testimonials.push(newTestimonial);
-  res.json(db.testimonials);
+  testimonials.push(newTestimonial);
+  res.json(testimonials);
 });
 
-app.put('/testimonials/:id', (req, res) => {
+router.route('/testimonials/:id').put((req, res) => {
   const { author, text } = req.query;
   const id = req.params.id;
-  const testimonials = db.testimonials.find((item) => item.id === parseInt(id));
-  testimonials.author = author;
-  testimonials.text = text;
-  res.json(db.testimonials);
+  const editTestimonials = testimonials.find(
+    (item) => item.id === parseInt(id)
+  );
+  editTestimonials.author = author;
+  editTestimonials.text = text;
+  res.json(testimonials);
 });
 
-app.delete('/testimonials/:id', (req, res) => {
+router.route('/testimonials/:id').delete((req, res) => {
   const id = req.params.id;
-  db.testimonials.splice(
-    db.testimonials.findIndex((item) => item.id === parseInt(id)),
+  testimonials.splice(
+    testimonials.findIndex((item) => item.id === parseInt(id)),
     1
   );
   res.json({ message: 'ok' });
 });
 
-module.exports = app;
+module.exports = router;

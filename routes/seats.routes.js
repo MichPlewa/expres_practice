@@ -1,16 +1,14 @@
 const express = require('express');
-const db = require('../db');
 const uuid = require('uuid').v4;
-
-const app = express();
-
 const { seats } = require('../db');
 
-app.get('/seats', (req, res) => {
+const router = express.Router();
+
+router.route('/seats').get((req, res) => {
   res.json(seats);
 });
 
-app.get('/seats/:id', (req, res) => {
+router.route('/seats/:id').get((req, res) => {
   const id = req.params.id;
   if (id === 'random') {
     res.send(seats[Math.floor(Math.random() * seats.length)]);
@@ -19,7 +17,7 @@ app.get('/seats/:id', (req, res) => {
   }
 });
 
-app.post('/seats', (req, res) => {
+router.route('/seats').post((req, res) => {
   const { day, seat, client, email } = req.query;
   const id = uuid();
   const newSeat = { id: id, day, seat, client, email };
@@ -27,7 +25,7 @@ app.post('/seats', (req, res) => {
   res.json(seats);
 });
 
-app.put('/seats/:id', (req, res) => {
+router.route('/seats/:id').put((req, res) => {
   const { day, seat, client, email } = req.query;
   const id = req.params.id;
   const editSeats = seats.find((item) => item.id === parseInt(id));
@@ -38,7 +36,7 @@ app.put('/seats/:id', (req, res) => {
   res.json(seats);
 });
 
-app.delete('/seats/:id', (req, res) => {
+router.route('/seats/:id').delete((req, res) => {
   const id = req.params.id;
   seats.splice(
     seats.findIndex((item) => item.id === parseInt(id)),
@@ -47,4 +45,4 @@ app.delete('/seats/:id', (req, res) => {
   res.json({ message: 'ok' });
 });
 
-module.exports = app;
+module.exports = router;
