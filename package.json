@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm-run-all -p server client",
-    "server": "node server.js",
+    "server": "nodemon server.js",
     "client": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
