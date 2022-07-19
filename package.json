@@ -48,5 +48,8 @@
     "redux-thunk": "^2.4.1",
     "sass": "^1.49.9",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
   }
 }
