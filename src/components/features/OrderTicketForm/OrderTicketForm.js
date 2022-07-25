@@ -9,10 +9,15 @@ import {
   Alert,
   Progress,
 } from 'reactstrap';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addSeatRequest, getRequests } from '../../../redux/seatsRedux';
-import { loadSeatsRequest } from '../../../redux/seatsRedux';
+import {
+  addSeatRequest,
+  getRequests,
+  loadSeats,
+  loadSeatsRequest,
+} from '../../../redux/seatsRedux';
+import io from 'socket.io-client';
 
 import './OrderTicketForm.scss';
 import SeatChooser from './../SeatChooser/SeatChooser';
@@ -20,7 +25,17 @@ import SeatChooser from './../SeatChooser/SeatChooser';
 const OrderTicketForm = () => {
   const dispatch = useDispatch();
   const requests = useSelector(getRequests);
-  console.log(requests);
+
+  useEffect(() => {
+    const socket = io(
+      process.env.NODE_ENV === 'production' ? '/' : 'http://localhost:8000/'
+    );
+    socket.on('seatsUpdated', (seats) => {
+      dispatch(loadSeats(seats));
+    });
+  }, []);
+
+  //end of seats update
 
   const [order, setOrder] = useState({
     client: '',
@@ -30,18 +45,13 @@ const OrderTicketForm = () => {
   });
   const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
-    setInterval(() => {
-      dispatch(loadSeatsRequest());
-    }, 120000);
-    return () => {
-      clearInterval();
-    };
-  }, []);
-
   const updateSeat = (e, seatId) => {
     e.preventDefault();
     setOrder({ ...order, seat: seatId });
+    // if other fields are filled it will also check if seat is available
+    if (order.client && order.email && order.day) {
+      dispatch(loadSeatsRequest());
+    }
   };
 
   const updateTextField = ({ target }) => {
@@ -59,6 +69,7 @@ const OrderTicketForm = () => {
 
     if (order.client && order.email && order.day && order.seat) {
       await dispatch(addSeatRequest(order));
+      dispatch(loadSeatsRequest());
       setOrder({
         client: '',
         email: '',
