@@ -16,11 +16,11 @@ app.use('/api', testimonialsRoutes);
 app.use('/api', concertsRoutes);
 app.use('/api', seatsRoutes);
 
+app.use(express.static(path.join(__dirname, '/build')));
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/build/index.html'));
 });
-
-app.use(express.static(path.join(__dirname, '/build')));
 
 app.use((req, res) => {
   res.status(404).json({ message: 'error' });
