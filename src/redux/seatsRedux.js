@@ -5,8 +5,6 @@ import { API_URL } from '../config';
 export const getSeats = ({ seats }) => seats.data;
 export const getRequests = ({ seats }) => seats.requests;
 
-/* ACTIONS */
-
 // action name creator
 const reducerName = 'seats';
 const createActionName = name => `app/${reducerName}/${name}`;
