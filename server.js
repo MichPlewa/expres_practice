@@ -5,6 +5,8 @@ const socket = require('socket.io');
 const mongoose = require('mongoose');
 
 const app = express();
+const uri =
+  'mongodb+srv://mipsial:123456@cluster0.xib3aux.mongodb.net/?retryWrites=true&w=majority';
 
 const testimonialsRoutes = require('./routes/testimonials.routes.js');
 const concertsRoutes = require('./routes/concerts.routes.js');
@@ -32,9 +34,7 @@ app.use((req, res) => {
   res.status(404).json({ message: 'error' });
 });
 
-mongoose.connect('mongodb://localhost:27017/NewWaveDB', {
-  useNewUrlParser: true,
-});
+mongoose.connect(uri, { useNewUrlParser: true });
 
 const db = mongoose.connection;
 
