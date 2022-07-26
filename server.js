@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 const app = express();
 const uri =
-  'mongodb+srv://mipsial:123456@cluster0.xib3aux.mongodb.net/?retryWrites=true&w=majority';
+  'mongodb+srv://mipsial:dasfsdfasd@cluster0.xib3aux.mongodb.net/?retryWrites=true&w=majority';
 
 const testimonialsRoutes = require('./routes/testimonials.routes.js');
 const concertsRoutes = require('./routes/concerts.routes.js');
