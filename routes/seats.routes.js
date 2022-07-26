@@ -12,6 +12,6 @@ router.post('/seats', Control.postOne);
 
 router.put('/seats/:id', Control.editOne);
 
-router.delete('/seats/:id', Controle.deleteOne);
+router.delete('/seats/:id', Control.deleteOne);
 
 module.exports = router;

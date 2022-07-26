@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Control = require('../models/testimonials.model');
+const Control = require('../controllers/testimonials.controllers');
 
 router.get('/testimonials', Control.getAll);
 
