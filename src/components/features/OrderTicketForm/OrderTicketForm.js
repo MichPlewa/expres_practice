@@ -17,7 +17,7 @@ import {
   loadSeats,
   loadSeatsRequest,
 } from '../../../redux/seatsRedux';
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 
 import './OrderTicketForm.scss';
 import SeatChooser from './../SeatChooser/SeatChooser';
@@ -27,8 +27,10 @@ const OrderTicketForm = () => {
   const requests = useSelector(getRequests);
 
   useEffect(() => {
+    console.log('fsdf');
     const socket = io(
-      process.env.NODE_ENV === 'production' ? '/' : 'http://localhost:8000/'
+      process.env.NODE_ENV === 'production' ? '/' : 'ws://localhost:8000',
+      { transports: ['websocket'] }
     );
     socket.on('seatsUpdated', (seats) => {
       dispatch(loadSeats(seats));
