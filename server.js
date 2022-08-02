@@ -2,8 +2,11 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const socket = require('socket.io');
+const mongoose = require('mongoose');
 
 const app = express();
+const uri =
+  'mongodb+srv://mipsial:dasfsdfasd@cluster0.xib3aux.mongodb.net/?retryWrites=true&w=majority';
 
 const testimonialsRoutes = require('./routes/testimonials.routes.js');
 const concertsRoutes = require('./routes/concerts.routes.js');
@@ -29,6 +32,15 @@ app.get('*', (req, res) => {
 
 app.use((req, res) => {
   res.status(404).json({ message: 'error' });
+});
+
+mongoose.connect(uri, { useNewUrlParser: true });
+
+const db = mongoose.connection;
+
+db.once('open', () => console.log('Connected to the database'));
+db.on('error', (err) => {
+  console.log('error by connecting to database', err);
 });
 
 const server = app.listen(process.env.PORT || 8000, () => {
