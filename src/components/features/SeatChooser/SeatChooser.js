@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Progress, Alert } from 'reactstrap';
 import {
@@ -7,13 +7,12 @@ import {
   getRequests,
 } from '../../../redux/seatsRedux';
 import './SeatChooser.scss';
-
+import { io } from 'socket.io-client';
 
 const SeatChooser = ({ chosenDay, chosenSeat, updateSeat }) => {
   const dispatch = useDispatch();
   const seats = useSelector(getSeats);
   const requests = useSelector(getRequests);
-
 
   useEffect(() => {
     dispatch(loadSeatsRequest());
