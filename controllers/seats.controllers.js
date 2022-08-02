@@ -44,6 +44,7 @@ exports.postOne = async (req, res) => {
       });
       await newSeat.save();
       res.json({ message: 'Ok' });
+      req.io.emit('seatsUpdated', allSeats);
     }
   } catch (err) {
     res.status(500).json({ message: err });
