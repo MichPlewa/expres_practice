@@ -7,7 +7,6 @@ import {
   getRequests,
 } from '../../../redux/seatsRedux';
 import './SeatChooser.scss';
-import { io } from 'socket.io-client';
 
 const SeatChooser = ({ chosenDay, chosenSeat, updateSeat }) => {
   const dispatch = useDispatch();

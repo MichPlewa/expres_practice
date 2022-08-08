@@ -2,6 +2,7 @@ const Seat = require('../models/seats.model');
 
 exports.getAll = async (req, res) => {
   try {
+    console.log('here');
     res.json(await Seat.find());
   } catch (err) {
     res.status(500).json({ message: err });
@@ -33,7 +34,7 @@ exports.getById = async (req, res) => {
 exports.postOne = async (req, res) => {
   try {
     const { day, seat, client, email } = req.body;
-    if (await Seat.exsits({ day, seat })) {
+    if (await Seat.exists({ day, seat })) {
       res.json({ message: 'The slot is already taken' });
     } else {
       const newSeat = new Seat({
@@ -43,10 +44,12 @@ exports.postOne = async (req, res) => {
         email: email,
       });
       await newSeat.save();
-      res.json({ message: 'Ok' });
+      const allSeats = await Seat.find();
       req.io.emit('seatsUpdated', allSeats);
+      res.json({ message: 'Ok' });
     }
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: err });
   }
 };

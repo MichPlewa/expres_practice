@@ -32,6 +32,7 @@ const OrderTicketForm = () => {
     );
     socket.on('seatsUpdated', (seats) => {
       dispatch(loadSeats(seats));
+      console.log(seats);
     });
   }, []);
 
