@@ -1,8 +1,8 @@
 const Seat = require('../models/seats.model');
+const sanitize = require('mongo-sanitize');
 
 exports.getAll = async (req, res) => {
   try {
-    console.log('here');
     res.json(await Seat.find());
   } catch (err) {
     res.status(500).json({ message: err });
@@ -33,7 +33,7 @@ exports.getById = async (req, res) => {
 
 exports.postOne = async (req, res) => {
   try {
-    const { day, seat, client, email } = req.body;
+    const { day, seat, client, email } = sanitize(req.body);
     if (await Seat.exists({ day, seat })) {
       res.json({ message: 'The slot is already taken' });
     } else {
