@@ -8,4 +8,4 @@ const concertsSchema = mongoose.Schema({
   image: { type: String, require: true },
 });
 
-mongoose.model('Concert', concertsSchema);
+module.exports = mongoose.model('Concert', concertsSchema);

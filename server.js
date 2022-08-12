@@ -3,10 +3,11 @@ const path = require('path');
 const cors = require('cors');
 const socket = require('socket.io');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 
 const app = express();
 const uri =
-  'mongodb+srv://mipsial:dasfsdfasd@cluster0.xib3aux.mongodb.net/?retryWrites=true&w=majority';
+  'mongodb+srv://mipsial:dasfsdfasd@cluster0.xib3aux.mongodb.net/Ticket-app?retryWrites=true&w=majority';
 
 const testimonialsRoutes = require('./routes/testimonials.routes.js');
 const concertsRoutes = require('./routes/concerts.routes.js');
@@ -15,16 +16,18 @@ const seatsRoutes = require('./routes/seats.routes.js');
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '/build')));
-
-app.use('/api', testimonialsRoutes);
-app.use('/api', concertsRoutes);
-app.use('/api', seatsRoutes);
+app.use(helmet());
 
 app.use((req, res, next) => {
   req.io = io;
   next();
 });
+
+app.use('/api', testimonialsRoutes);
+app.use('/api', concertsRoutes);
+app.use('/api', seatsRoutes);
+
+app.use(express.static(path.join(__dirname, '/build')));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/build/index.html'));
